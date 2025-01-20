@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activity Recommender</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .recommendations {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Nature & Kids Activity Recommender</h1>
+  <p>Enter your location to get personalized recommendations:</p>
+  
+  <form id="recommendationForm">
+    <label>
+      Latitude:
+      <input type="text" id="latitude" required>
+    </label>
+    <br><br>
+    <label>
+      Longitude:
+      <input type="text" id="longitude" required>
+    </label>
+    <br><br>
+    <label>
+      Preferences (comma-separated):
+      <input type="text" id="preferences" placeholder="e.g., park, museum, hike">
+    </label>
+    <br><br>
+    <button type="submit">Get Recommendations</button>
+  </form>
+
+  <div class="recommendations" id="recommendations"></div>
+
+  <script>
+    document.getElementById('recommendationForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const latitude = document.getElementById('latitude').value;
+      const longitude = document.getElementById('longitude').value;
+      const preferences = document.getElementById('preferences').value.split(',').map(p => p.trim());
+
+      const response = await fetch('/recommend', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ latitude, longitude, preferences })
+      });
+
+      const data = await response.json();
+      const recommendationsDiv = document.getElementById('recommendations');
+      
+      recommendationsDiv.innerHTML = `<h2>Weather: ${data.weather}</h2>`;
+      recommendationsDiv.innerHTML += '<h3>Recommendations:</h3><ul>';
+      data.recommendations.forEach(r => {
+        recommendationsDiv.innerHTML += `<li>${r.name} (${r.type}) - ${r.address}</li>`;
+      });
+      recommendationsDiv.innerHTML += '</ul>';
+    });
+  </script>
+</body>
+</html>
