@@ -2,11 +2,11 @@ from flask import Flask, request, jsonify
 import requests
 import math
 
-app = Flask(__name__)
+app = Flask(ExperienceHunter)
 
 # Replace with your API keys
 OPENWEATHER_API_KEY = "your_openweather_api_key"
-GOOGLE_PLACES_API_KEY = "AIzaSyClAGzmOsyAPBJ0GY7aOtbvSKJLOFWaoD0"
+GOOGLE_PLACES_API_KEY = "your_google_places_api_key"
 
 def get_weather(lat, lon):
     url = f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={OPENWEATHER_API_KEY}&units=imperial"
